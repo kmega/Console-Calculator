@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ConsoleCalculator
 {
@@ -6,23 +7,24 @@ namespace ConsoleCalculator
     {
         internal double MakeOperation(string operation)
         {
-            operation = CheckOperation(operation);
+            List<string> listOfOperands = ChangeToOperands(operation);
 
-            double result = ExecuteOperation(operation);
+            double result = OperateOnOperands(listOfOperands);
 
             return result;
         }
 
-        internal string CheckOperation(string operation)
+        internal List<string> ChangeToOperands(string operation)
         {
-            string newOperation = "";
+            List<string> listOfOperands = new List<string>();
+            string holder = "";
 
             for (int i = 0; i < operation.Length; i++)
             {
                 try
                 {
-                    Convert.ToInt32(operation[i].ToString());
-                    newOperation += operation[i];
+                    Convert.ToDouble(operation[i].ToString());
+                    holder += operation[i];
                 }
                 catch
                 {
@@ -31,8 +33,10 @@ namespace ConsoleCalculator
                         case '+':
                         case '-':
                         case '*':
-                        case ':':
-                            newOperation += operation[i];
+                        case '/':
+                            listOfOperands.Add(holder);
+                            holder = "";
+                            listOfOperands.Add(operation[i].ToString());
                             break;
                         default:
                             continue;
@@ -40,12 +44,39 @@ namespace ConsoleCalculator
                 }
             }
 
-            return newOperation;
+            listOfOperands.Add(holder);
+
+            return listOfOperands;
         }
 
-        internal double ExecuteOperation(string operation)
+        internal double OperateOnOperands(List<string> listOfOperands)
         {
-            throw new NotImplementedException();
+            double resultHolder = 0, firstValue, secondValue;
+
+            for (int i = 1; i < listOfOperands.Capacity - 5; i += 2)
+            {
+                firstValue = Convert.ToDouble(listOfOperands[i - 1]);
+                secondValue = Convert.ToDouble(listOfOperands[i + 1]);
+                switch (listOfOperands[i])
+                {
+                    case "+":
+                        resultHolder = firstValue + secondValue;
+                        break;
+                    case "-":
+                        resultHolder = firstValue - secondValue;
+                        break;
+                    case "*":
+                        resultHolder = firstValue * secondValue;
+                        break;
+                    case "/":
+                        resultHolder = firstValue / secondValue;
+                        break;
+                }
+
+                listOfOperands[i + 1] = resultHolder.ToString();
+            }
+
+            return resultHolder;
         }
     }
 }

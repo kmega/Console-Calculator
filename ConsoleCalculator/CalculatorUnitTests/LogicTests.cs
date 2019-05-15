@@ -1,5 +1,6 @@
-﻿using ConsoleCalculator;
+using ConsoleCalculator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace LogicEngineTests
 {
@@ -11,14 +12,18 @@ namespace LogicEngineTests
         public void ShouldLeaveDigitsAndArithmeticSigns()
         {
             // For
-            LogicEngine logicEngine = new LogicEngine();
-            string operation = "1g+;1-/1]", expectedResult = "1+1-1";
+            List<string> expectedResult = new List<string>()
+            {
+                "2", "+", "10", "-", "300"
+            };
+            string operation = "2gJ+;10-A|30p0^@]";
 
             // Given
-            string result = logicEngine.CheckOperation(operation);
+            LogicEngine logicEngine = new LogicEngine();
+            List<string> result = logicEngine.ChangeToOperands(operation);
 
             // Assert
-            Assert.AreEqual(result, expectedResult);
+            CollectionAssert.AreEqual(result, expectedResult);
         }
     }
 }

@@ -6,6 +6,7 @@ namespace ConsoleCalculator
     {
         internal void ShowInstructions()
         {
+            throw new NotImplementedException();
         }
     }
 }
