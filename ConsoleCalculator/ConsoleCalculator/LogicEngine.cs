@@ -51,32 +51,68 @@ namespace ConsoleCalculator
 
         internal double OperateOnOperands(List<string> listOfOperands)
         {
-            double resultHolder = 0, firstValue, secondValue;
+            string[] arithmeticOrder = { "*", "/", "+", "-" };
+            double result = 0, value;
 
-            for (int i = 1; i < listOfOperands.Capacity - 5; i += 2)
+            while (listOfOperands.Capacity != 1)
             {
-                firstValue = Convert.ToDouble(listOfOperands[i - 1]);
-                secondValue = Convert.ToDouble(listOfOperands[i + 1]);
-                switch (listOfOperands[i])
+                for (int i = 0; i < arithmeticOrder.Length; i++)
                 {
-                    case "+":
-                        resultHolder = firstValue + secondValue;
-                        break;
-                    case "-":
-                        resultHolder = firstValue - secondValue;
-                        break;
-                    case "*":
-                        resultHolder = firstValue * secondValue;
-                        break;
-                    case "/":
-                        resultHolder = firstValue / secondValue;
-                        break;
-                }
+                    for (int j = 0; j < listOfOperands.Capacity; j++)
+                    {
+                        listOfOperands.TrimExcess();
 
-                listOfOperands[i + 1] = resultHolder.ToString();
+                        try
+                        {
+                            if (arithmeticOrder[i] == listOfOperands[j])
+                            {
+                                result = Convert.ToDouble(listOfOperands[j - 1]);
+                                value = Convert.ToDouble(listOfOperands[j + 1]);
+
+                                switch (arithmeticOrder[i])
+                                {
+                                    case "+":
+                                        result += value;
+                                        break;
+                                    case "-":
+                                        result -= value;
+                                        break;
+                                    case "*":
+                                        result *= value;
+                                        break;
+                                    case "/":
+                                        result /= value;
+                                        break;
+                                }
+
+                                listOfOperands[j] = result.ToString();
+                                listOfOperands[j - 1] = listOfOperands[j + 1] = null;
+
+                                listOfOperands = CacheEmptySlots(listOfOperands);
+                            }
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                }
             }
 
-            return resultHolder;
+            return result;
+        }
+
+        internal List<string> CacheEmptySlots(List<string> listOfOperands)
+        {
+            for (int i = 0; i < listOfOperands.Capacity; i++)
+            {
+                if (listOfOperands[i] == null)
+                {
+                    listOfOperands.RemoveAt(i);
+                }
+            }
+
+            return listOfOperands;
         }
     }
 }

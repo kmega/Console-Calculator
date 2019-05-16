@@ -1,6 +1,6 @@
 ﻿namespace ConsoleCalculator
 {
-    class OparateStrategy : IArithmeticStrategy
+    class OperateMultiplying :  IArithmeticStrategy
     {
         public double Oparate()
         {

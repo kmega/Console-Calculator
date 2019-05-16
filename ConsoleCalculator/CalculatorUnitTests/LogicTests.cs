@@ -7,7 +7,6 @@ namespace LogicEngineTests
     [TestClass]
     public class LogicTests
     {
-        
         [TestMethod]
         public void ShouldLeaveDigitsAndArithmeticSigns()
         {
@@ -16,14 +15,52 @@ namespace LogicEngineTests
             {
                 "2", "+", "10", "-", "300"
             };
-            string operation = "2gJ+;10-A|30p0^@]";
+            string operation = "2gi+;10-A|30p0^@]";
 
             // Given
             LogicEngine logicEngine = new LogicEngine();
             List<string> result = logicEngine.ChangeToOperands(operation);
 
             // Assert
-            CollectionAssert.AreEqual(result, expectedResult);
+            CollectionAssert.AreEqual(expectedResult, result);
+        }
+
+        [TestMethod]
+        public void ShouldResultInLogicalOutcome01()
+        {
+            // For
+            List<string> listOfOperands = new List<string>()
+            {
+                "100", "-", "47", "*", "4", "/", "2", "-", "5"
+            };
+
+            double expectedResult = 1;
+
+            // Given
+            LogicEngine logicEngine = new LogicEngine();
+            double result = logicEngine.OperateOnOperands(listOfOperands);
+
+            // Assert
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [TestMethod]
+        public void ShouldResultInLogicalOutcome02()
+        {
+            // For
+            List<string> listOfOperands = new List<string>()
+            {
+                "123", "+", "14", "*", "8", "-", "7", "*", "2", "-", "4"
+            };
+
+            double expectedResult = 217;
+
+            // Given
+            LogicEngine logicEngine = new LogicEngine();
+            double result = logicEngine.OperateOnOperands(listOfOperands);
+
+            // Assert
+            Assert.AreEqual(expectedResult, result);
         }
     }
 }

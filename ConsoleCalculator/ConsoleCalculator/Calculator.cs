@@ -6,8 +6,8 @@ namespace ConsoleCalculator
     {
         internal void Start()
         {
-            UserInterface userInterface = new UserInterface();
-            userInterface.ShowInstructions();
+            UserInterface userinterface = new UserInterface();
+            userinterface.ShowInstructions();
 
             string operation = WriteOperation();
 
@@ -19,8 +19,8 @@ namespace ConsoleCalculator
 
         private string WriteOperation()
         {
-            string userInput = Console.ReadLine();
-            return userInput;
+            string userinput = Console.ReadLine();
+            return userinput;
         }
     }
 }
