@@ -1,7 +1,9 @@
-﻿namespace ConsoleCalculator
+﻿using System.Collections.Generic;
+
+namespace ConsoleCalculator
 {
     interface IArithmeticStrategy
     {
-        double Oparate();
+        List<string> Oparate(List<string> listOfOperands, int j);
     }
 }

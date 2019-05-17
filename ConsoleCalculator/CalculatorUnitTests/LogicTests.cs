@@ -62,5 +62,43 @@ namespace LogicEngineTests
             // Assert
             Assert.AreEqual(expectedResult, result);
         }
+
+        [TestMethod]
+        public void ShouldResultInLogicalOutcome03()
+        {
+            // For
+            List<string> listOfOperands = new List<string>()
+            {
+                "5", "*", "(", "4", "-", "2", ")", "/", "2", "-", "2"
+            };
+
+            double expectedResult = 3;
+
+            // Given
+            LogicEngine logicEngine = new LogicEngine();
+            double result = logicEngine.OperateOnOperands(listOfOperands);
+
+            // Assert
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [TestMethod]
+        public void ShouldResultInLogicalOutcome04()
+        {
+            // For
+            List<string> listOfOperands = new List<string>()
+            {
+                "2", "*", "(", "6", "-", "(", "10", "-", "4", "/", "2", ")", "/", "2", ")", "-", "5"
+            };
+
+            double expectedResult = -7;
+
+            // Given
+            LogicEngine logicEngine = new LogicEngine();
+            double result = logicEngine.OperateOnOperands(listOfOperands);
+
+            // Assert
+            Assert.AreEqual(expectedResult, result);
+        }
     }
 }

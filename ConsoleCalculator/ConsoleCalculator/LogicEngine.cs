@@ -30,6 +30,8 @@ namespace ConsoleCalculator
                 {
                     switch (operation[i])
                     {
+                        case '(':
+                        case ')':
                         case '+':
                         case '-':
                         case '*':
@@ -51,13 +53,24 @@ namespace ConsoleCalculator
 
         internal double OperateOnOperands(List<string> listOfOperands)
         {
-            string[] arithmeticOrder = { "*", "/", "+", "-" };
-            double result = 0, value;
+            IArithmeticStrategy arithmeticStrategy;
+
+            string[] arithmeticOrder = { "(", "*", "/", "+", "-" };
 
             while (listOfOperands.Capacity != 1)
             {
                 for (int i = 0; i < arithmeticOrder.Length; i++)
                 {
+                    switch (arithmeticOrder[i])
+                    {
+                        case "(":
+                            arithmeticStrategy = new BracketStrategy();
+                            break;
+                        default:
+                            arithmeticStrategy = new OperateStrategy();
+                            break;
+                    }
+
                     for (int j = 0; j < listOfOperands.Capacity; j++)
                     {
                         listOfOperands.TrimExcess();
@@ -66,29 +79,7 @@ namespace ConsoleCalculator
                         {
                             if (arithmeticOrder[i] == listOfOperands[j])
                             {
-                                result = Convert.ToDouble(listOfOperands[j - 1]);
-                                value = Convert.ToDouble(listOfOperands[j + 1]);
-
-                                switch (arithmeticOrder[i])
-                                {
-                                    case "+":
-                                        result += value;
-                                        break;
-                                    case "-":
-                                        result -= value;
-                                        break;
-                                    case "*":
-                                        result *= value;
-                                        break;
-                                    case "/":
-                                        result /= value;
-                                        break;
-                                }
-
-                                listOfOperands[j] = result.ToString();
-                                listOfOperands[j - 1] = listOfOperands[j + 1] = null;
-
-                                listOfOperands = CacheEmptySlots(listOfOperands);
+                                listOfOperands = arithmeticStrategy.Oparate(listOfOperands, j);
                             }
                         }
                         catch
@@ -99,20 +90,7 @@ namespace ConsoleCalculator
                 }
             }
 
-            return result;
-        }
-
-        internal List<string> CacheEmptySlots(List<string> listOfOperands)
-        {
-            for (int i = 0; i < listOfOperands.Capacity; i++)
-            {
-                if (listOfOperands[i] == null)
-                {
-                    listOfOperands.RemoveAt(i);
-                }
-            }
-
-            return listOfOperands;
+            return Convert.ToDouble(listOfOperands[0]);
         }
     }
 }
