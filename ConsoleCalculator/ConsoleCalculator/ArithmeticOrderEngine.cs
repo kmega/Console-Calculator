@@ -3,91 +3,27 @@ using System.Collections.Generic;
 
 namespace ConsoleCalculator
 {
-    internal class LogicEngine
+    internal class ArithmeticOrderEngine
     {
         internal double MakeOperation(string operation)
         {
-            List<string> listOfOperands = ChangeToOperands(operation);
-
-            double result = OperateOnOperands(listOfOperands);
+            double result = Operate(operation);
 
             return result;
         }
 
-        internal List<string> ChangeToOperands(string operation)
-        {
-            List<string> listOfOperands = new List<string>();
-            string holder = null;
-
-            for (int i = 0; i < operation.Length; i++)
-            {
-                try
-                {
-                    Convert.ToDouble(operation[i].ToString());
-                    holder += operation[i];
-                }
-                catch
-                {
-                    switch (operation[i])
-                    {
-                        case '(':
-                        case ')':
-                        case '+':
-                        case '-':
-                        case '*':
-                        case '/':
-                            listOfOperands.Add(holder);
-                            holder = null;
-                            listOfOperands.Add(operation[i].ToString());
-                            break;
-                        default:
-                            continue;
-                    }
-                }
-            }
-
-            listOfOperands.Add(holder);
-
-            listOfOperands = CacheNullSlots(listOfOperands);
-
-            return listOfOperands;
-        }
-
-        private List<string> CacheNullSlots(List<string> listOfOperands)
-        {
-            for (int i = 0; i < listOfOperands.Capacity; i++)
-            {
-                try
-                {
-                    if (listOfOperands[i] == null)
-                    {
-                        listOfOperands.RemoveAt(i);
-                    }
-                }
-                catch
-                {
-                    continue;
-                }
-
-                listOfOperands.TrimExcess();
-            }
-
-            return listOfOperands;
-        }
-
-        internal double OperateOnOperands(List<string> listOfOperands)
+        internal double Operate(string operation)
         {
             IArithmeticStrategy arithmeticStrategy;
+            char[,] arithmeticOrder = { { '/', '*' }, { '-', '+' } };
 
-            string[] arithmeticOrder = { "(", "/", "*", "-", "+" };
-
-            while (listOfOperands.Capacity != 1)
+            for (int i = 0; i < arithmeticOrder.Rank; i++)
             {
-                for (int i = 0; i < arithmeticOrder.Length; i++)
+                for (int j = 0; j < arithmeticOrder.GetLength(i); j++)
                 {
-                    switch (arithmeticOrder[i])
+                    switch (arithmeticOrder[i, j])
                     {
-                        case "(":
+                        case '(':
                             arithmeticStrategy = new BracketStrategy();
                             break;
                         default:
@@ -95,26 +31,22 @@ namespace ConsoleCalculator
                             break;
                     }
 
-                    for (int j = 0; j < listOfOperands.Capacity; j++)
+                    for (int k = 0; k < operation.Length; k++)
                     {
-                        try
+                        if (arithmeticOrder[i, j] == operation[k])
                         {
-                            if (arithmeticOrder[i] == listOfOperands[j])
-                            {
-                                listOfOperands = arithmeticStrategy.Oparate(listOfOperands, j);
-                            }
+                            operation = arithmeticStrategy.Oparate(operation, k);
                         }
-                        catch
-                        {
-                            continue;
-                        }
-
-                        listOfOperands.TrimExcess();
                     }
-                }
+                }                
             }
 
-            return Convert.ToDouble(listOfOperands[0]);
+            for (int i = 0; i < arithmeticOrder.Length; i++)
+            {
+
+            }
+
+            return Convert.ToDouble(operation);
         }
     }
 }

@@ -5,46 +5,68 @@ namespace ConsoleCalculator
 {
     class OperateStrategy : IArithmeticStrategy
     {
-        public List<string> Oparate(List<string> listOfOperands, int index)
+        public string Oparate(string operation, int index)
         {
-            double result = Convert.ToDouble(listOfOperands[index - 1]);
-            double value = Convert.ToDouble(listOfOperands[index + 1]);
+            List<string> listOfOperands = ConvertToOperandList(operation);
 
-            switch (listOfOperands[index])
+            double result = Convert.ToDouble(operation[index - 1]);
+            double value = Convert.ToDouble(operation[index + 1]);
+
+            switch (operation[index])
             {
-                case "+":
+                case '+':
                     result += value;
                     break;
-                case "-":
+                case '-':
                     result -= value;
                     break;
-                case "*":
+                case '*':
                     result *= value;
                     break;
-                case "/":
+                case '/':
                     result /= value;
                     break;
             }
 
-            listOfOperands[index] = result.ToString();
-            listOfOperands[index - 1] = listOfOperands[index + 1] = null;
+            operand[index] = result.ToString();
+            operand[index - 1] = operand[index + 1] = null;
 
-            listOfOperands = CacheNullSlots(listOfOperands);
+            operand = CacheNullSlots(operand);
 
-            return listOfOperands;
+            return operand;
         }
 
-        internal List<string> CacheNullSlots(List<string> listOfOperands)
+        private List<string> ConvertToOperandList(string operation)
         {
-            for (int i = 0; i < listOfOperands.Capacity; i++)
+            List<string> listOfOperands = new List<string>();
+            string holder = "";
+
+            for (int i = 0; i < operation.Length; i++)
             {
-                if (listOfOperands[i] == null)
+                try
                 {
-                    listOfOperands.RemoveAt(i);
+                    Convert.ToDouble(operation[i]);
+                }
+                catch
+                {
+
                 }
             }
 
             return listOfOperands;
+        }
+
+        internal List<string> CacheNullSlots(List<string> operand)
+        {
+            for (int i = 0; i < operand.Capacity; i++)
+            {
+                if (operand[i] == null)
+                {
+                    operand.RemoveAt(i);
+                }
+            }
+
+            return operand;
         }
     }
 }
