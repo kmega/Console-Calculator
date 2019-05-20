@@ -5,12 +5,12 @@ namespace ConsoleCalculator
 {
     class OperateStrategy : IArithmeticStrategy
     {
-        public List<string> Oparate(List<string> listOfOperands, int j)
+        public List<string> Oparate(List<string> listOfOperands, int index)
         {
-            double result = Convert.ToDouble(listOfOperands[j - 1]);
-            double value = Convert.ToDouble(listOfOperands[j + 1]);
+            double result = Convert.ToDouble(listOfOperands[index - 1]);
+            double value = Convert.ToDouble(listOfOperands[index + 1]);
 
-            switch (listOfOperands[j])
+            switch (listOfOperands[index])
             {
                 case "+":
                     result += value;
@@ -26,15 +26,15 @@ namespace ConsoleCalculator
                     break;
             }
 
-            listOfOperands[j] = result.ToString();
-            listOfOperands[j - 1] = listOfOperands[j + 1] = null;
+            listOfOperands[index] = result.ToString();
+            listOfOperands[index - 1] = listOfOperands[index + 1] = null;
 
-            listOfOperands = CacheEmptySlots(listOfOperands);
+            listOfOperands = CacheNullSlots(listOfOperands);
 
             return listOfOperands;
         }
 
-        internal List<string> CacheEmptySlots(List<string> listOfOperands)
+        internal List<string> CacheNullSlots(List<string> listOfOperands)
         {
             for (int i = 0; i < listOfOperands.Capacity; i++)
             {

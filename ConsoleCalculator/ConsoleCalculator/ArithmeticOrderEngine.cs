@@ -17,7 +17,7 @@ namespace ConsoleCalculator
         internal List<string> ChangeToOperands(string operation)
         {
             List<string> listOfOperands = new List<string>();
-            string holder = "";
+            string holder = null;
 
             for (int i = 0; i < operation.Length; i++)
             {
@@ -37,7 +37,7 @@ namespace ConsoleCalculator
                         case '*':
                         case '/':
                             listOfOperands.Add(holder);
-                            holder = "";
+                            holder = null;
                             listOfOperands.Add(operation[i].ToString());
                             break;
                         default:
@@ -48,6 +48,30 @@ namespace ConsoleCalculator
 
             listOfOperands.Add(holder);
 
+            listOfOperands = CacheNullSlots(listOfOperands);
+
+            return listOfOperands;
+        }
+
+        private List<string> CacheNullSlots(List<string> listOfOperands)
+        {
+            for (int i = 0; i < listOfOperands.Capacity; i++)
+            {
+                try
+                {
+                    if (listOfOperands[i] == null)
+                    {
+                        listOfOperands.RemoveAt(i);
+                    }
+                }
+                catch
+                {
+                    continue;
+                }
+
+                listOfOperands.TrimExcess();
+            }
+
             return listOfOperands;
         }
 
@@ -55,7 +79,7 @@ namespace ConsoleCalculator
         {
             IArithmeticStrategy arithmeticStrategy;
 
-            string[] arithmeticOrder = { "(", "*", "/", "+", "-" };
+            string[] arithmeticOrder = { "(", "/", "*", "-", "+" };
 
             while (listOfOperands.Capacity != 1)
             {
@@ -73,8 +97,6 @@ namespace ConsoleCalculator
 
                     for (int j = 0; j < listOfOperands.Capacity; j++)
                     {
-                        listOfOperands.TrimExcess();
-
                         try
                         {
                             if (arithmeticOrder[i] == listOfOperands[j])
@@ -86,6 +108,8 @@ namespace ConsoleCalculator
                         {
                             continue;
                         }
+
+                        listOfOperands.TrimExcess();
                     }
                 }
             }

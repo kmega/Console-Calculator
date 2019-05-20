@@ -1,89 +1,94 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ConsoleCalculator
 {
-    class BracketStrategy :  IArithmeticStrategy
+    class BracketStrategy : IArithmeticStrategy
     {
-        public List<string> Oparate(List<string> listOfOperands, int j)
+        public List<string> Oparate(List<string> listOfOperands, int index)
         {
             List<string> bracketOperands = new List<string>();
 
-            for (int i = j; i < listOfOperands.Capacity; i++)
+            int openingBracketIndex = FindLastOpeningBracket(listOfOperands);
+            int closingBracketIndex = FindFirstClosingBracket(listOfOperands, openingBracketIndex);
+
+            for (int i = openingBracketIndex + 1; i < closingBracketIndex; i++)
             {
-                if (listOfOperands[i] == ")")
+                bracketOperands.Add(listOfOperands[i]);
+            }
+
+            IArithmeticStrategy arithmeticStrategy = new OperateStrategy();
+
+            string[] arithmeticOrder = { "*", "/", "+", "-" };
+
+            while (bracketOperands.Capacity != 1)
+            {
+                for (int i = 0; i < arithmeticOrder.Length; i++)
                 {
-                    for (int k = j + 1; k < i; k++)
+                    for (int j = 0; j < bracketOperands.Capacity; j++)
                     {
-                        bracketOperands.Add(listOfOperands[k]);
-                    }
+                        bracketOperands.TrimExcess();
 
-                    IArithmeticStrategy arithmeticStrategy;
-
-                    string[] arithmeticOrder = { "(", "*", "/", "+", "-" };
-
-                    while (bracketOperands.Capacity != 1)
-                    {
-                        for (int l = 0; l < arithmeticOrder.Length; l++)
+                        try
                         {
-                            switch (arithmeticOrder[l])
+                            if (arithmeticOrder[i] == bracketOperands[j])
                             {
-                                case "(":
-                                    arithmeticStrategy = new BracketStrategy();
-                                    break;
-                                default:
-                                    arithmeticStrategy = new OperateStrategy();
-                                    break;
+                                bracketOperands = arithmeticStrategy.Oparate(bracketOperands, j);
                             }
-
-                            for (int m = 0; m < bracketOperands.Capacity; m++)
-                            {
-                                bracketOperands.TrimExcess();
-
-                                try
-                                {
-                                    if (arithmeticOrder[l] == bracketOperands[m])
-                                    {
-                                        bracketOperands = arithmeticStrategy.Oparate(bracketOperands, m);
-                                    }
-                                }
-                                catch
-                                {
-                                    continue;
-                                }
-                            }
+                        }
+                        catch
+                        {
+                            continue;
                         }
                     }
                 }
             }
 
-            listOfOperands = RemoveBrackets(listOfOperands, bracketOperands);
+            listOfOperands = RemoveOperatedBrackets(listOfOperands, bracketOperands, openingBracketIndex, closingBracketIndex);
 
             return listOfOperands;
         }
 
-        private List<string> RemoveBrackets(List<string> listOfOperands, List<string> bracketOperands)
+        private int FindLastOpeningBracket(List<string> listOfOperands)
+        {
+            int bracketIndex = 0;
+
+            for (int i = 0; i < listOfOperands.Capacity; i++)
+            {
+                try
+                {
+                    if (listOfOperands[i] == "(")
+                    {
+                        bracketIndex = i;
+                    }
+                }
+                catch
+                {
+                    continue;
+                }
+            }
+
+            return bracketIndex;
+        }
+
+        private int FindFirstClosingBracket(List<string> listOfOperands, int openingBracketIndex)
         {
             for (int i = 0; i < listOfOperands.Capacity; i++)
             {
-                if (listOfOperands[i] == "(")
+                if (listOfOperands[i] == ")")
                 {
-                    for (int j = i; j < listOfOperands.Capacity; j++)
-                    {
-                        if (listOfOperands[j] == ")")
-                        {
-                            listOfOperands.RemoveAt(j);
-                            listOfOperands.RemoveAt(j - 1);
-                            break;
-                        }
-                        else
-                        {
-                            listOfOperands.RemoveAt(j);
-                        }
-                    }
-
-                    listOfOperands[i] = bracketOperands[0];
+                    return i;
                 }
             }
+
+            return openingBracketIndex;
+        }
+
+        private List<string> RemoveOperatedBrackets(List<string> listOfOperands, List<string> bracketOperands, int openingBracketIndex, int closingBracketIndex)
+        {
+            listOfOperands.RemoveRange(openingBracketIndex + 1, closingBracketIndex - openingBracketIndex);
+
+            listOfOperands[openingBracketIndex] = bracketOperands[0];
 
             return listOfOperands;
         }
