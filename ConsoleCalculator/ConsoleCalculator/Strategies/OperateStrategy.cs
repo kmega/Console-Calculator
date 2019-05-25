@@ -5,7 +5,7 @@ namespace ConsoleCalculator
 {
     class OperateStrategy : IArithmeticStrategy
     {
-        public List<string> Oparate(List<string> listOfOperands, int index)
+        public List<string> Operate(List<string> listOfOperands, int index)
         {
             double result = Convert.ToDouble(listOfOperands[index - 1]);
             double value = Convert.ToDouble(listOfOperands[index + 1]);

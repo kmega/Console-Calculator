@@ -6,21 +6,15 @@ namespace ConsoleCalculator
     {
         internal void Start()
         {
-            UserInterface userinterface = new UserInterface();
-            userinterface.ShowInstructions();
+            UserInterface userInterface = new UserInterface();
 
-            string operation = WriteOperation();
+            userInterface.ShowInstructions();
+            string operation = userInterface.WriteOperation();
 
-            LogicEngine logicEngine = new LogicEngine();
-            double result = logicEngine.MakeOperation(operation);
+            ArithmeticLogicEngine arithmeticLogicEngine = new ArithmeticLogicEngine();
+            double result = arithmeticLogicEngine.ExecuteOperation(operation);
 
             Console.WriteLine(result);
-        }
-
-        private string WriteOperation()
-        {
-            string userinput = Console.ReadLine();
-            return userinput;
         }
     }
 }

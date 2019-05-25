@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace ConsoleCalculator
 {
-    internal class LogicEngine
+    internal class ArithmeticLogicEngine
     {
-        internal double MakeOperation(string operation)
+        internal double ExecuteOperation(string operation)
         {
             List<string> listOfOperands = ChangeToOperands(operation);
 
@@ -48,29 +48,8 @@ namespace ConsoleCalculator
 
             listOfOperands.Add(holder);
 
-            listOfOperands = CacheNullSlots(listOfOperands);
-
-            return listOfOperands;
-        }
-
-        private List<string> CacheNullSlots(List<string> listOfOperands)
-        {
-            for (int i = 0; i < listOfOperands.Capacity; i++)
-            {
-                try
-                {
-                    if (listOfOperands[i] == null)
-                    {
-                        listOfOperands.RemoveAt(i);
-                    }
-                }
-                catch
-                {
-                    continue;
-                }
-
-                listOfOperands.TrimExcess();
-            }
+            Tools tools = new Tools();
+            listOfOperands = tools.CacheNullSlots(listOfOperands);
 
             return listOfOperands;
         }
@@ -79,13 +58,14 @@ namespace ConsoleCalculator
         {
             IArithmeticStrategy arithmeticStrategy;
 
-            string[] arithmeticOrder = { "(", "/", "*", "-", "+" };
+            Tools tools = new Tools();
+            string[,] arithmeticOrder = tools.GetArithmeticOrder();
 
             while (listOfOperands.Capacity != 1)
             {
-                for (int i = 0; i < arithmeticOrder.Length; i++)
+                for (int i = 0; i < arithmeticOrder.GetLength(0); i++)
                 {
-                    switch (arithmeticOrder[i])
+                    switch (arithmeticOrder[i, 0])
                     {
                         case "(":
                             arithmeticStrategy = new BracketStrategy();
@@ -95,22 +75,7 @@ namespace ConsoleCalculator
                             break;
                     }
 
-                    for (int j = 0; j < listOfOperands.Capacity; j++)
-                    {
-                        try
-                        {
-                            if (arithmeticOrder[i] == listOfOperands[j])
-                            {
-                                listOfOperands = arithmeticStrategy.Oparate(listOfOperands, j);
-                            }
-                        }
-                        catch
-                        {
-                            continue;
-                        }
-
-                        listOfOperands.TrimExcess();
-                    }
+                    listOfOperands = tools.CalculateSingleOperand(listOfOperands, arithmeticOrder, i, arithmeticStrategy);
                 }
             }
 

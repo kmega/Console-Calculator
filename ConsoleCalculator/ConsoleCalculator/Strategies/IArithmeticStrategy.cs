@@ -4,6 +4,6 @@ namespace ConsoleCalculator
 {
     interface IArithmeticStrategy
     {
-        List<string> Oparate(List<string> listOfOperands, int index);
+        List<string> Operate(List<string> listOfOperands, int index);
     }
 }

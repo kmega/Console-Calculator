@@ -24,7 +24,7 @@ namespace LogicEngineTests
             };
 
             // Given
-            List<string> result = arithmeticStrategy.Oparate(listOfOperands, 0);
+            List<string> result = arithmeticStrategy.Operate(listOfOperands, 0);
 
             // Assert
             CollectionAssert.AreEqual(expectedResult, result);

@@ -7,5 +7,11 @@ namespace ConsoleCalculator
         internal void ShowInstructions()
         {
         }
+
+        protected internal string WriteOperation()
+        {
+            string userinput = Console.ReadLine();
+            return userinput;
+        }
     }
 }

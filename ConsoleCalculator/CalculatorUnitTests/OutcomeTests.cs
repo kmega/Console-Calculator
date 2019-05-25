@@ -1,6 +1,5 @@
 using ConsoleCalculator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 
 namespace LogicEngineTests
 {
@@ -15,8 +14,8 @@ namespace LogicEngineTests
             double expectedResult = 0;
 
             // Given
-            LogicEngine logicEngine = new LogicEngine();
-            double result = logicEngine.MakeOperation(operation);
+            ArithmeticLogicEngine arithmeticLogicEngine = new ArithmeticLogicEngine();
+            double result = arithmeticLogicEngine.ExecuteOperation(operation);
 
             // Assert
             Assert.AreEqual(expectedResult, result);
@@ -30,8 +29,8 @@ namespace LogicEngineTests
             double expectedResult = 1;
 
             // Given
-            LogicEngine logicEngine = new LogicEngine();
-            double result = logicEngine.MakeOperation(operation);
+            ArithmeticLogicEngine arithmeticLogicEngine = new ArithmeticLogicEngine();
+            double result = arithmeticLogicEngine.ExecuteOperation(operation);
 
             // Assert
             Assert.AreEqual(expectedResult, result);
@@ -45,8 +44,8 @@ namespace LogicEngineTests
             double expectedResult = 3;
 
             // Given
-            LogicEngine logicEngine = new LogicEngine();
-            double result = logicEngine.MakeOperation(operation);
+            ArithmeticLogicEngine arithmeticLogicEngine = new ArithmeticLogicEngine();
+            double result = arithmeticLogicEngine.ExecuteOperation(operation);
 
             // Assert
             Assert.AreEqual(expectedResult, result);
@@ -60,8 +59,8 @@ namespace LogicEngineTests
             double expectedResult = 0;
 
             // Given
-            LogicEngine logicEngine = new LogicEngine();
-            double result = logicEngine.MakeOperation(operation);
+            ArithmeticLogicEngine arithmeticLogicEngine = new ArithmeticLogicEngine();
+            double result = arithmeticLogicEngine.ExecuteOperation(operation);
 
             // Assert
             Assert.AreEqual(expectedResult, result);
@@ -74,8 +73,8 @@ namespace LogicEngineTests
             double expectedResult = 2609;
 
             // Given
-            LogicEngine logicEngine = new LogicEngine();
-            double result = logicEngine.MakeOperation(operation);
+            ArithmeticLogicEngine arithmeticLogicEngine = new ArithmeticLogicEngine();
+            double result = arithmeticLogicEngine.ExecuteOperation(operation);
 
             // Assert
             Assert.AreEqual(expectedResult, result);
@@ -89,8 +88,8 @@ namespace LogicEngineTests
             double expectedResult = 5;
 
             // Given
-            LogicEngine logicEngine = new LogicEngine();
-            double result = logicEngine.MakeOperation(operation);
+            ArithmeticLogicEngine arithmeticLogicEngine = new ArithmeticLogicEngine();
+            double result = arithmeticLogicEngine.ExecuteOperation(operation);
 
             // Assert
             Assert.AreEqual(expectedResult, result);

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ConsoleCalculator
 {
     class BracketStrategy : IArithmeticStrategy
     {
-        public List<string> Oparate(List<string> listOfOperands, int index)
+        public List<string> Operate(List<string> listOfOperands, int index)
         {
             List<string> bracketOperands = new List<string>();
 
@@ -17,30 +16,14 @@ namespace ConsoleCalculator
                 bracketOperands.Add(listOfOperands[i]);
             }
 
-            IArithmeticStrategy arithmeticStrategy = new OperateStrategy();
-
-            string[] arithmeticOrder = { "*", "/", "+", "-" };
+            Tools tools = new Tools();
+            string[,] arithmeticOrder = tools.GetArithmeticOrder();
 
             while (bracketOperands.Capacity != 1)
             {
-                for (int i = 0; i < arithmeticOrder.Length; i++)
+                for (int i = 0; i < arithmeticOrder.GetLength(0); i++)
                 {
-                    for (int j = 0; j < bracketOperands.Capacity; j++)
-                    {
-                        bracketOperands.TrimExcess();
-
-                        try
-                        {
-                            if (arithmeticOrder[i] == bracketOperands[j])
-                            {
-                                bracketOperands = arithmeticStrategy.Oparate(bracketOperands, j);
-                            }
-                        }
-                        catch
-                        {
-                            continue;
-                        }
-                    }
+                    tools.CalculateSingleOperand(bracketOperands, arithmeticOrder, i, new OperateStrategy());
                 }
             }
 

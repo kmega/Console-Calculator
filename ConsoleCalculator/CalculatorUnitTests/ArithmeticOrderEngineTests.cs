@@ -18,8 +18,8 @@ namespace LogicEngineTests
             string operation = "2gi+;10-A|30p0^@]";
 
             // Given
-            LogicEngine logicEngine = new LogicEngine();
-            List<string> result = logicEngine.ChangeToOperands(operation);
+            ArithmeticLogicEngine arithmeticLogicEngine = new ArithmeticLogicEngine();
+            List<string> result = arithmeticLogicEngine.ChangeToOperands(operation);
 
             // Assert
             CollectionAssert.AreEqual(expectedResult, result);
